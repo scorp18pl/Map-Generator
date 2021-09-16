@@ -10,9 +10,9 @@ private:
 	void compileErrors(unsigned int shader, const char *type);
 public:
 	Shader(const char *vertexFile, const char *fragmentFile);
+	~Shader();
 
-	void Activate();
-	void Delete();
+	void activate();
 };
 
 #endif

@@ -60,11 +60,11 @@ Shader::Shader(const char *vertexFile, const char *fragmentFile) {
 	glDeleteShader(fragmentShader);
 }
 
-void Shader::Activate() {
+void Shader::activate() {
 	glUseProgram(this->id);
 }
 
-void Shader::Delete() {
+Shader::~Shader() {
 	glDeleteProgram(this->id);
 }
 

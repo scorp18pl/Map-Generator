@@ -13,16 +13,40 @@
 
 class Perlin {
 private:
-	unsigned int width, height;
-	Grid grid;
+	int width, height;
+	Grid *grid;
+
+	GLfloat vertices[8] = {
+		-1.0f,  1.0f,
+		 1.0f,  1.0f,
+		 1.0f, -1.0f,
+		-1.0f, -1.0f
+	};
+
+	GLuint elements[6] = {
+		0, 1, 3,
+		1, 2, 3
+	};
 
 	GLFWwindow *window;
-	VertexBuffer vbo;
-	VAO vao;
-	ElementBuffer ebo;
-	Shader shader;
+	Shader *shader;
+
+	VertexBuffer *vbo;
+	VAO *vao;
+	ElementBuffer *ebo;
+
+	void handleWindowError();
+	void initializeGL();
+
+	uint8_t getPixelValue(size_t x, size_t y);
+
+	void generateImage();
+	void displayImage();
 public:
-	Perlin();
+	Perlin(int window_width, int fside_count);
+	~Perlin();
+	
+	void start();
 };
 
 #endif

@@ -9,11 +9,17 @@ private:
 	glm::vec2 **vectors;
 
 	static glm::vec2 getVector(float angle_frac);
+	glm::vec2 scaleCoordinates(glm::vec2 position);
+	glm::vec2 *getCornerVectors(glm::vec2 position);
+	glm::vec2 *getOffsetVectors(glm::vec2 position);
+	float fade(float x);
+	float fade2(float x, float y);
 public:
 	Grid(size_t width, size_t height);
 	Grid(size_t side);
 
-	glm::vec2 getVector(size_t x, size_t y);
+	float getValue(glm::vec2 position);
+	glm::vec2 getVectorAt(size_t x, size_t y);
 	void randomize();
 
 	void print();

@@ -66,4 +66,12 @@
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="perlin.vert">
+      <Filter>Pliki zasobów</Filter>
+    </None>
+    <None Include="perlin.frag">
+      <Filter>Pliki zasobów</Filter>
+    </None>
+  </ItemGroup>
 </Project>
