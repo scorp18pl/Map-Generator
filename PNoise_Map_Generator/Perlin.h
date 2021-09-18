@@ -10,17 +10,18 @@
 #include "VAO.h"
 #include "ElementBuffer.h"
 #include "Shader.h"
+#include "Texture.h"
 
 class Perlin {
 private:
 	int width, height;
 	Grid *grid;
 
-	GLfloat vertices[8] = {
-		-1.0f,  1.0f,
-		 1.0f,  1.0f,
-		 1.0f, -1.0f,
-		-1.0f, -1.0f
+	GLfloat vertices[4 * (2 + 2)] = {
+		-1.0f,  1.0f, 0.0f, 1.0f,
+		 1.0f,  1.0f, 1.0f, 1.0f,
+		 1.0f, -1.0f, 1.0f, 0.0f,
+		-1.0f, -1.0f, 0.0f, 0.0f
 	};
 
 	GLuint elements[6] = {

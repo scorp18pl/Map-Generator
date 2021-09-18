@@ -12,6 +12,7 @@ public:
 	Shader(const char *vertexFile, const char *fragmentFile);
 	~Shader();
 
+	GLuint getId();
 	void activate();
 };
 

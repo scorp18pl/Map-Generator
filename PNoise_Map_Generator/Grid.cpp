@@ -29,7 +29,13 @@ glm::vec2 Grid::scaleCoordinates(glm::vec2 position) {
 }
 
 glm::vec2 *Grid::getCornerVectors(glm::vec2 position) {
-	glm::vec2 vectors[CORNER_VEC_COUNT];
+	glm::vec2 *vectors = (glm::vec2 *)malloc(sizeof(glm::vec2) * 
+											 CORNER_VEC_COUNT);
+
+	if (vectors == nullptr) {
+		std::cout << "Failed to allocate corner vector memory" << std::endl;
+		exit(1);
+	}
 
 	size_t floor_x, floor_y, ceil_x, ceil_y;
 	floor_x = (size_t)floorf(position.x);
@@ -47,7 +53,13 @@ glm::vec2 *Grid::getCornerVectors(glm::vec2 position) {
 }
 
 glm::vec2 *Grid::getOffsetVectors(glm::vec2 position) {
-	glm::vec2 vectors[CORNER_VEC_COUNT];
+	glm::vec2 *vectors = (glm::vec2 *)malloc(sizeof(glm::vec2) *
+											 CORNER_VEC_COUNT);
+
+	if (vectors == nullptr) {
+		std::cout << "Failed to allocate offset vector memory" << std::endl;
+		exit(1);
+	}
 
 	vectors[0] = -position;
 	vectors[1] = glm::vec2(1.0f - position.x, -position.y);
@@ -109,23 +121,26 @@ void Grid::print() {
 //Returns the perlin noise value (between 0 and 1) for
 //a given point on [0,1] x [0,1] plane.
 float Grid::getValue(glm::vec2 position) {
-
 	glm::vec2 position_s = scaleCoordinates(position);
 	glm::vec2 *corner_vectors = getCornerVectors(position_s);
 
-	glm::vec2 position_r = position_s - corner_vectors[0];
+	glm::vec2 position_r = position_s - glm::vec2(floorf(position_s.x), floorf(position_s.y));
 	glm::vec2 *offset_vectors = getOffsetVectors(position_r);
 	
-	float dot_products[4];
+	float dot_products[4] = {};
 	for (size_t i = 0; i < CORNER_VEC_COUNT; i++) {
 		dot_products[i] = glm::dot(corner_vectors[i], offset_vectors[i]);
 	}
 
-	float fade_values[4];
-	fade_values[0] = fade2(1 - position_r.x, 1 - position_r.y);
-	fade_values[0] = fade2(position_r.x, 1 - position_r.y);
-	fade_values[0] = fade2(position_r.x, position_r.y);
-	fade_values[0] = fade2(1 - position_r.x, position_r.y);
+	free(corner_vectors);
+	free(offset_vectors);
+
+	float fade_values[] = {
+		fade2(1.0f - position_r.x, 1.0f - position_r.y),
+		fade2(position_r.x, 1.0f - position_r.y),
+		fade2(position_r.x, position_r.y),
+		fade2(1.0f - position_r.x, position_r.y)
+	};
 
 	float value = 0.0f;
 	for (size_t i = 0; i < CORNER_VEC_COUNT; i++) {

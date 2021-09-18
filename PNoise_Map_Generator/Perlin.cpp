@@ -56,12 +56,16 @@ void Perlin::generateImage() {
 	free(image);
 }
 
+void Perlin::displayImage() {
+	Texture tex0("default.png", GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE);
+	tex0.texUnit(this->shader, "tex0", 0);
+}
+
 Perlin::Perlin(int window_width, int fside_count) {
 	this->width = this->height = window_width;
 
 	this->grid = new Grid(fside_count + 1LU);
 	grid->randomize();
-	//grid->print();
 
 	initializeGL();
 
@@ -95,6 +99,7 @@ void Perlin::start() {
 	generateImage();
 
 	vao->linkAttributes(*this->vbo, 0, 2, GL_FLOAT, 2 * sizeof(float), (void *)0);
+	vao->linkAttributes(*this->vbo, 1, 2, GL_FLOAT, 2 * sizeof(float), (void *)(2 * sizeof(float)));
 
 	vao->unbind();
 	vbo->unbind();
