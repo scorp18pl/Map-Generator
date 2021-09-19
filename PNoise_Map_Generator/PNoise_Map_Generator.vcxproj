@@ -152,6 +152,7 @@
   <ItemGroup>
     <ClCompile Include="..\glad.c" />
     <ClCompile Include="Buffer.cpp" />
+    <ClCompile Include="GLDebug.cpp" />
     <ClCompile Include="ElementBuffer.cpp" />
     <ClCompile Include="Grid.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -163,6 +164,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Buffer.h" />
+    <ClInclude Include="GLDebug.h" />
     <ClInclude Include="ElementBuffer.h" />
     <ClInclude Include="Grid.h" />
     <ClInclude Include="Perlin.h" />

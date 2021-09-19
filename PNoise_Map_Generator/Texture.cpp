@@ -1,5 +1,34 @@
 #include "Texture.h"
 
+Texture::Texture(unsigned char *bytes, int widthImg, int heightImg, 
+				 int numColCh, GLenum texType, GLuint slot, GLenum format, 
+				 GLenum pixelType) {
+	this->type = texType;
+
+	//Generate an OpenGL texture object and assign an id to it
+	glGenTextures(1, &this->id);
+	// Assigns the texture to a Texture Unit
+	glActiveTexture(GL_TEXTURE0 + slot);
+	this->unit = slot;
+	glBindTexture(texType, this->id);
+
+	//Set the min and mag filters to nearest
+	glTexParameteri(texType, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(texType, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+	//Set the texture wrap on both axes to repeat
+	glTexParameteri(texType, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(texType, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+	// Assigns the image to the OpenGL Texture object
+	glTexImage2D(texType, 0, GL_RGBA, widthImg, heightImg, 0, format, pixelType, bytes); \
+	// Generates MipMaps
+	glGenerateMipmap(texType);
+
+	// Unbinds the OpenGL Texture object so that it can't accidentally be modified
+	glBindTexture(texType, 0);
+}
+
 Texture::Texture(const char *image, GLenum texType, GLuint slot, GLenum format, GLenum pixelType) {
 	this->type = texType;
 	// Stores the width, height, and the number of color channels of the image

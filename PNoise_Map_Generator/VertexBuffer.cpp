@@ -1,5 +1,7 @@
 #include "VertexBuffer.h"
 
+#include "GLDebug.h"
+
 VertexBuffer::VertexBuffer(GLfloat *vertices, GLsizeiptr size)
 	:Buffer(GL_ARRAY_BUFFER) {
 	bind();

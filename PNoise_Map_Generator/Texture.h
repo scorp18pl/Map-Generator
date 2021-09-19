@@ -13,7 +13,12 @@ private:
 	GLuint unit;
 
 public:
-	Texture(const char *image, GLenum texType, GLuint slot, GLenum format, GLenum pixelType);
+	Texture(unsigned char *bytes, int widthImg, int heightImg,
+			int numColCh, GLenum texType, GLuint slot, GLenum format,
+			GLenum pixelType);
+
+	Texture(const char *image, GLenum texType, GLuint slot, 
+			GLenum format, GLenum pixelType);
 	~Texture();
 
 	// Assigns a texture unit to a texture

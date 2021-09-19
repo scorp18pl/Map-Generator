@@ -7,7 +7,7 @@ Buffer::Buffer(GLenum type)
 
 // Binds the buffer to it's binding point
 void Buffer::bind() {
-	glBindBuffer(this->type, this->type);
+	glBindBuffer(this->type, this->id);
 }
 
 // Unbinds the buffer

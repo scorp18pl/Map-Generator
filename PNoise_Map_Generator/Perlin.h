@@ -18,10 +18,11 @@ private:
 	Grid *grid;
 
 	GLfloat vertices[4 * (2 + 2)] = {
-		-1.0f,  1.0f, 0.0f, 1.0f,
-		 1.0f,  1.0f, 1.0f, 1.0f,
-		 1.0f, -1.0f, 1.0f, 0.0f,
-		-1.0f, -1.0f, 0.0f, 0.0f
+		//Vertex Coordinates	//Texture Coordinates
+		-1.0f,  1.0f,			0.0f, 1.0f,
+		 1.0f,  1.0f,			1.0f, 1.0f,
+		 1.0f, -1.0f,			1.0f, 0.0f,
+		-1.0f, -1.0f,			0.0f, 0.0f
 	};
 
 	GLuint elements[6] = {
@@ -41,8 +42,8 @@ private:
 
 	uint8_t getPixelValue(size_t x, size_t y);
 
-	void generateImage();
-	void displayImage();
+	Texture *generateTexture();
+	void displayTexture(Texture *texture);
 public:
 	Perlin(int window_width, int fside_count);
 	~Perlin();

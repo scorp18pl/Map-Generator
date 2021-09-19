@@ -28,6 +28,8 @@ glm::vec2 Grid::scaleCoordinates(glm::vec2 position) {
 	return glm::vec2(x_t, y_t);
 }
 
+//Returns corner vectors for a given position vector.
+//WARNING : Returned vector array memory has to be freed!
 glm::vec2 *Grid::getCornerVectors(glm::vec2 position) {
 	glm::vec2 *vectors = (glm::vec2 *)malloc(sizeof(glm::vec2) * 
 											 CORNER_VEC_COUNT);
@@ -52,6 +54,9 @@ glm::vec2 *Grid::getCornerVectors(glm::vec2 position) {
 	return vectors;
 }
 
+//Returns offset vectors calculated for a given position.
+//Position is relative to it's top - left corner vector position.
+//WARNING : Returned vector array memory has to be freed!
 glm::vec2 *Grid::getOffsetVectors(glm::vec2 position) {
 	glm::vec2 *vectors = (glm::vec2 *)malloc(sizeof(glm::vec2) *
 											 CORNER_VEC_COUNT);

@@ -33,7 +33,7 @@ uint8_t Perlin::getPixelValue(size_t x, size_t y) {
 	return (uint8_t)(this->grid->getValue(glm::vec2(x_norm, y_norm)) * 255.0f);
 }
 
-void Perlin::generateImage() {
+Texture *Perlin::generateTexture() {
 	int image_size = this->width * this->height * NUMBER_OF_CHANNELS;
 	unsigned char *image = (unsigned char *)malloc(image_size);
 
@@ -49,22 +49,38 @@ void Perlin::generateImage() {
 			*pixel = getPixelValue(x, y);
 		}
 	}
+	//stbi_write_png("default.png", this->width, this->height,
+	//			   NUMBER_OF_CHANNELS, image, this->width * NUMBER_OF_CHANNELS);
 
-	stbi_write_png("default.png", this->width, this->height,
-				   NUMBER_OF_CHANNELS, image, this->width * NUMBER_OF_CHANNELS);
+	Texture *texture = new Texture(image, this->width, this->height, NUMBER_OF_CHANNELS, 
+								   GL_TEXTURE_2D, 0, GL_RED, GL_UNSIGNED_BYTE);
 
-	free(image);
+
+	return texture;
 }
 
-void Perlin::displayImage() {
-	Texture tex0("default.png", GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE);
-	tex0.texUnit(this->shader, "tex0", 0);
+void Perlin::displayTexture(Texture *texture) {
+	this->shader->activate();
+	texture->texUnit(this->shader, "tex0", 0);
+
+	while (!glfwWindowShouldClose(this->window)) {
+		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT);
+
+		this->shader->activate();
+		texture->bind();
+		this->vao->bind();
+		glDrawElements(GL_TRIANGLES, sizeof(this->elements) / sizeof(int), GL_UNSIGNED_INT, 0);
+
+		glfwSwapBuffers(this->window);
+		glfwPollEvents();
+	}
 }
 
 Perlin::Perlin(int window_width, int fside_count) {
 	this->width = this->height = window_width;
-
-	this->grid = new Grid(fside_count + 1LU);
+	
+	this->grid = new Grid((size_t)fside_count + 1LU);
 	grid->randomize();
 
 	initializeGL();
@@ -84,6 +100,13 @@ Perlin::Perlin(int window_width, int fside_count) {
 	vao->bind();
 	this->vbo = new VertexBuffer(this->vertices, sizeof(this->vertices));
 	this->ebo = new ElementBuffer(this->elements, sizeof(this->elements));
+
+	vao->linkAttributes(*this->vbo, 0, 2, GL_FLOAT, 4 * sizeof(float), (void *)0);
+	vao->linkAttributes(*this->vbo, 1, 2, GL_FLOAT, 4 * sizeof(float), (void *)(2 * sizeof(float)));
+
+	this->vao->unbind();
+	this->vbo->unbind();
+	this->ebo->unbind();
 }
 
 Perlin::~Perlin() {
@@ -96,14 +119,7 @@ Perlin::~Perlin() {
 }
 
 void Perlin::start() {
-	generateImage();
+	Texture *texture = generateTexture();
 
-	vao->linkAttributes(*this->vbo, 0, 2, GL_FLOAT, 2 * sizeof(float), (void *)0);
-	vao->linkAttributes(*this->vbo, 1, 2, GL_FLOAT, 2 * sizeof(float), (void *)(2 * sizeof(float)));
-
-	vao->unbind();
-	vbo->unbind();
-	ebo->unbind();
-
-	this->shader->activate();
+	displayTexture(texture);
 }
