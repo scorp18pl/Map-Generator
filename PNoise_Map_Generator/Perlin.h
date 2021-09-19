@@ -14,8 +14,8 @@ public:
 	Perlin(int window_width, int window_height);
 	~Perlin();
 
-	void getNoise(unsigned char *image, int num_fields_x, int num_fields_y);
-	void getNoise(unsigned char *image, int num_fields);
+	void addNoise(unsigned char *image, float weight, int num_fields_x, int num_fields_y);
+	void addNoise(unsigned char *image, float weight, int num_fields);
 };
 
 #endif

@@ -126,6 +126,9 @@ void Grid::resize(int num_fields_x, int num_fields_y) {
 	this->width = num_fields_x;
 	this->height = num_fields_x;
 
+	delete vectors;
+	this->vectors = vectors_r;
+
 	randomize();
 }
 

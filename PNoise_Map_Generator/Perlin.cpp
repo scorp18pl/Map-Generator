@@ -28,18 +28,18 @@ Perlin::~Perlin() {
 	delete this->grid;
 }
 
-void Perlin::getNoise(unsigned char *image, int num_fields_x, int num_fields_y) {
+void Perlin::addNoise(unsigned char *image, float weight, int num_fields_x, int num_fields_y) {
+	assert(weight >= 0.0f && weight <= 1.0f);
 	this->grid->resize(num_fields_x + 1, num_fields_y + 1);
 
-	unsigned char *pixel = image;
 	for (int x = 0; x < this->width; x++) {
 		for (int y = 0; y < this->height; y++) {
-			*pixel = getPixelValue(x, y);
-			pixel++;
+			image[x * height + y] = (uint8_t)((float)image[x * height + y] * (1.0f - weight));
+			image[x * height + y] += (uint8_t)(weight * (float)getPixelValue(x, y));
 		}
 	}
 }
 
-void Perlin::getNoise(unsigned char *image, int num_fields) {
-	getNoise(image, num_fields, num_fields);
+void Perlin::addNoise(unsigned char *image, float weight, int num_fields) {
+	addNoise(image, weight, num_fields, num_fields);
 }

@@ -9,6 +9,8 @@ private:
 	int width, height;
 	Perlin *perlin;
 	Display *display;
+
+	void combineNoise(unsigned char *image);
 public:
 	MapGen(int width, int height);
 	~MapGen();
