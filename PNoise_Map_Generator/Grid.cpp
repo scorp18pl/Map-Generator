@@ -16,7 +16,7 @@ glm::vec2 Grid::getVector(float angle_frac) {
 //a [0;1]^2 plane and scales it onto
 //the grid plane
 glm::vec2 Grid::scaleCoordinates(glm::vec2 position) {
-	size_t cell_count_x, cell_count_y;
+	int cell_count_x, cell_count_y;
 	cell_count_x = this->width - 1;
 	cell_count_y = this->height - 1;
 
@@ -31,17 +31,16 @@ glm::vec2 Grid::scaleCoordinates(glm::vec2 position) {
 //Returns corner vectors for a given position vector.
 //WARNING : Returned vector array memory has to be freed!
 glm::vec2 *Grid::getCornerVectors(glm::vec2 position) {
-	glm::vec2 *vectors = (glm::vec2 *)malloc(sizeof(glm::vec2) * 
-											 CORNER_VEC_COUNT);
+	glm::vec2 *vectors = new glm::vec2[CORNER_VEC_COUNT];
 
 	if (vectors == nullptr) {
 		std::cout << "Failed to allocate corner vector memory" << std::endl;
 		exit(1);
 	}
 
-	size_t floor_x, floor_y, ceil_x, ceil_y;
-	floor_x = (size_t)floorf(position.x);
-	floor_y = (size_t)floorf(position.y);
+	int floor_x, floor_y, ceil_x, ceil_y;
+	floor_x = (int)floorf(position.x);
+	floor_y = (int)floorf(position.y);
 
 	ceil_x = floor_x + 1LU;
 	ceil_y = floor_y + 1LU;
@@ -58,8 +57,7 @@ glm::vec2 *Grid::getCornerVectors(glm::vec2 position) {
 //Position is relative to it's top - left corner vector position.
 //WARNING : Returned vector array memory has to be freed!
 glm::vec2 *Grid::getOffsetVectors(glm::vec2 position) {
-	glm::vec2 *vectors = (glm::vec2 *)malloc(sizeof(glm::vec2) *
-											 CORNER_VEC_COUNT);
+	glm::vec2 *vectors = new glm::vec2[CORNER_VEC_COUNT];
 
 	if (vectors == nullptr) {
 		std::cout << "Failed to allocate offset vector memory" << std::endl;
@@ -84,19 +82,21 @@ float Grid::fade2(float x, float y) {
 
 //Constructs a grid object. Sets all
 //vector values to <0.0f, 0.0f>.
-Grid::Grid(size_t width, size_t height) 
+Grid::Grid(int width, int height) 
 	:width(width), height(height) {
 	this->vectors = new glm::vec2 *[height];
 
-	for (size_t i = 0; i < height; i++) {
+	for (int i = 0; i < height; i++) {
 		this->vectors[i] = new glm::vec2[width];
-		for (size_t j = 0; j < width; j++) {
+		for (int j = 0; j < width; j++) {
 			this->vectors[i][j] = glm::vec2(0.0f, 0.0f);
 		}
 	}
+
+	randomize();
 }
 
-Grid::Grid(size_t side) 
+Grid::Grid(int side) 
 	:Grid(side, side) {
 }
 
@@ -105,18 +105,33 @@ void Grid::randomize() {
 	std::mt19937 gen(device());
 	std::uniform_real_distribution<> dist(0.0f, 1.0f);
 	
-	for (size_t i = 0; i < this->height; i++) {
-		for (size_t j = 0; j < this->width; j++) {
+	for (int i = 0; i < this->height; i++) {
+		for (int j = 0; j < this->width; j++) {
 			float angle = (float)dist(gen);
 			this->vectors[i][j] = Grid::getVector(angle);
 		}
 	}
+}
 
+void Grid::resize(int num_fields_x, int num_fields_y) {
+	glm::vec2 **vectors_r = new glm::vec2 *[num_fields_y];
+
+	for (int i = 0; i < num_fields_y; i++) {
+		vectors_r[i] = new glm::vec2[num_fields_x];
+		for (int j = 0; j < num_fields_x; j++) {
+			vectors_r[i][j] = glm::vec2(0.0f, 0.0f);
+		}
+	}
+	
+	this->width = num_fields_x;
+	this->height = num_fields_x;
+
+	randomize();
 }
 
 void Grid::print() {
-	for (size_t i = 0; i < this->height; i++) {
-		for (size_t j = 0; j < this->width; j++) {
+	for (int i = 0; i < this->height; i++) {
+		for (int j = 0; j < this->width; j++) {
 			glm::vec2 vec = this->vectors[i][j];
 			std::cout << vec.x << " " << vec.y << " " << vec.x * vec.x + vec.y * vec.y << std::endl;
 		}
@@ -133,12 +148,12 @@ float Grid::getValue(glm::vec2 position) {
 	glm::vec2 *offset_vectors = getOffsetVectors(position_r);
 	
 	float dot_products[4] = {};
-	for (size_t i = 0; i < CORNER_VEC_COUNT; i++) {
+	for (int i = 0; i < CORNER_VEC_COUNT; i++) {
 		dot_products[i] = glm::dot(corner_vectors[i], offset_vectors[i]);
 	}
 
-	free(corner_vectors);
-	free(offset_vectors);
+	delete corner_vectors;
+	delete offset_vectors;
 
 	float fade_values[] = {
 		fade2(1.0f - position_r.x, 1.0f - position_r.y),
@@ -148,7 +163,7 @@ float Grid::getValue(glm::vec2 position) {
 	};
 
 	float value = 0.0f;
-	for (size_t i = 0; i < CORNER_VEC_COUNT; i++) {
+	for (int i = 0; i < CORNER_VEC_COUNT; i++) {
 		value += fade_values[i] * dot_products[i];
 	}
 
@@ -161,6 +176,6 @@ float Grid::getValue(glm::vec2 position) {
 	return value;
 }
 
-glm::vec2 Grid::getVectorAt(size_t x, size_t y) {
+glm::vec2 Grid::getVectorAt(int x, int y) {
 	return this->vectors[y][x];
 }

@@ -152,10 +152,12 @@
   <ItemGroup>
     <ClCompile Include="..\glad.c" />
     <ClCompile Include="Buffer.cpp" />
+    <ClCompile Include="Display.cpp" />
     <ClCompile Include="GLDebug.cpp" />
     <ClCompile Include="ElementBuffer.cpp" />
     <ClCompile Include="Grid.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="MapGen.cpp" />
     <ClCompile Include="Perlin.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Texture.cpp" />
@@ -164,9 +166,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Buffer.h" />
+    <ClInclude Include="Display.h" />
     <ClInclude Include="GLDebug.h" />
     <ClInclude Include="ElementBuffer.h" />
     <ClInclude Include="Grid.h" />
+    <ClInclude Include="MapGen.h" />
     <ClInclude Include="Perlin.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Texture.h" />

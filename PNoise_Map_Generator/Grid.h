@@ -5,7 +5,7 @@
 
 class Grid {
 private:
-	size_t width, height;
+	int width, height;
 	glm::vec2 **vectors;
 
 	static glm::vec2 getVector(float angle_frac);
@@ -14,14 +14,16 @@ private:
 	glm::vec2 *getOffsetVectors(glm::vec2 position);
 	float fade(float x);
 	float fade2(float x, float y);
-public:
-	Grid(size_t width, size_t height);
-	Grid(size_t side);
-
-	float getValue(glm::vec2 position);
-	glm::vec2 getVectorAt(size_t x, size_t y);
 	void randomize();
 
+public:
+	Grid(int width, int height);
+	Grid(int side);
+
+	float getValue(glm::vec2 position);
+	glm::vec2 getVectorAt(int x, int y);
+
+	void resize(int num_fields_x, int num_fields_y);
 	void print();
 };
 

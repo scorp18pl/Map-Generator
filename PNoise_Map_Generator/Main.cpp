@@ -1,7 +1,6 @@
-#include "Perlin.h"
+#include "MapGen.h"
 
 int main() {
-
-	Perlin p(800, 4);
-	p.start();
+	MapGen m(800, 800);
+	m.start();
 }
