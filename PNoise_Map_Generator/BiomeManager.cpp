@@ -1,16 +1,18 @@
 #include "BiomeManager.h"
 
-const float BiomeManager::SEA1_LEVEL = 0.0f;
-const float BiomeManager::SEA2_LEVEL = 0.3f;
-const float BiomeManager::SEA3_LEVEL = 0.45f;
-const float BiomeManager::SEA4_LEVEL = 0.48f;
-const float BiomeManager::SAND_LEVEL = 0.495f;
-const float BiomeManager::GRASS1_LEVEL = 0.5f;
-const float BiomeManager::GRASS2_LEVEL = 0.54f;
-const float BiomeManager::FOREST_LEVEL = 0.52f;
-const float BiomeManager::MOUNTAIN1_LEVEL = 0.57f;
-const float BiomeManager::MOUNTAIN2_LEVEL = 0.58f;
-const float BiomeManager::SNOW_LEVEL = 0.59f;
+#include <cassert>
+
+float BiomeManager::SEA1_LEVEL = 0.0f;
+float BiomeManager::SEA2_LEVEL = 0.3f;
+float BiomeManager::SEA3_LEVEL = 0.45f;
+float BiomeManager::SEA4_LEVEL = 0.48f;
+float BiomeManager::SAND_LEVEL = 0.488f;
+float BiomeManager::GRASS1_LEVEL = 0.5f;
+float BiomeManager::GRASS2_LEVEL = 0.54f;
+float BiomeManager::FOREST_LEVEL = 0.52f;
+float BiomeManager::MOUNTAIN1_LEVEL = 0.57f;
+float BiomeManager::MOUNTAIN2_LEVEL = 0.58f;
+float BiomeManager::SNOW_LEVEL = 0.59f;
 
 const RGB BiomeManager::ERROR_COLOR(217, 87, 99);
 const RGB BiomeManager::SEA1_COLOR(63, 63, 116);
@@ -67,8 +69,23 @@ RGB BiomeManager::getColor(float height) {
 	}
 
 	if (height >= BiomeManager::SEA1_LEVEL) {
-		return BiomeManager::SEA1_COLOR;
+		return BiomeManager::SEA2_COLOR;
 	}
 
 	return BiomeManager::ERROR_COLOR;
+}
+
+void BiomeManager::setSeaLevel(float value) {
+	assert(value >= 0.0f && value <= 1.0f);
+
+	BiomeManager::SEA1_LEVEL = 0.0f;
+	BiomeManager::SEA2_LEVEL = value - 0.1f;
+	BiomeManager::SEA3_LEVEL = value - 0.03f;
+	BiomeManager::SEA4_LEVEL = value;
+	BiomeManager::SAND_LEVEL = value + 0.0008f;
+	BiomeManager::GRASS1_LEVEL = value + 0.002f;
+	BiomeManager::GRASS2_LEVEL = value + 0.006f;
+	BiomeManager::MOUNTAIN2_LEVEL = value + 0.1f;
+	BiomeManager::MOUNTAIN1_LEVEL = value + 0.2f;
+	BiomeManager::SNOW_LEVEL = value + 0.28f;
 }

@@ -8,16 +8,24 @@
 class MapGen {
 private:
 	int width, height;
+
+	bool has_seed = false;
+	int seed = 0, octaves = 8;
+	float persistance;
+		
 	Perlin *perlin;
 	Display *display;
 
 	void convertImage(unsigned char *dir, float *src);
-	void combineNoise(unsigned char *image, int iterations);
+	void combineNoise(unsigned char *image);
 public:
-	MapGen(int width, int height);
+	MapGen(int width, int height, float persistance = 0.5f);
 	~MapGen();
 
 	void start();
+	void setSeed(int value);
+	void setSeaLevel(float value);
+	void setOctavesNumber(int value);
 };
 
 #endif

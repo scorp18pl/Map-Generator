@@ -16,23 +16,26 @@ void MapGen::convertImage(unsigned char *dir, float *src) {
 	}
 }
 
-void MapGen::combineNoise(unsigned char *image, int iterations) {
+void MapGen::combineNoise(unsigned char *image) {
 	float *image_f = new float[(size_t)this->width * (size_t)this->height];
 
 	this->perlin->setNoise(image_f, 1);
 
-	for (int i = 0; i < iterations; i++) {
-		float pow = powf(2.0f, i + 1);
-		this->perlin->addNoise(image_f, 1.0f / pow , (int)pow);
+	float weight = this->persistance;
+	int pow = 2;
+	for (int i = 0; i < this->octaves; i++) {
+		this->perlin->addNoise(image_f, weight , pow);
+		pow *= 2;
+		weight *= this->persistance;
 	}
 
 	convertImage(image, image_f);
+	delete[] image_f;
 }
 
-MapGen::MapGen(int width, int height)
-	: width(width), height(height) {
+MapGen::MapGen(int width, int height, float persistance)
+	: width(width), height(height), persistance(persistance) {
 	this->perlin = new Perlin(width, height);
-	//perlin->setSeed(2137);
 	this->display = new Display(width, height);
 }
 
@@ -49,9 +52,22 @@ void MapGen::start() {
 		std::cout << "Unable to allocate memory for the image" << std::endl;
 	}
 
-	combineNoise(image, 8);
+	combineNoise(image);
 	this->display->setTexture(image);
 	this->display->displayTexture();
 
 	delete[] image;
+}
+
+void MapGen::setSeed(int value) {
+	this->has_seed = true;
+	this->perlin->setSeed(value);
+}
+
+void MapGen::setSeaLevel(float value) {
+	BiomeManager::setSeaLevel(value);
+}
+
+void MapGen::setOctavesNumber(int value) {
+	this->octaves = value;
 }
