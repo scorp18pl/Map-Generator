@@ -160,6 +160,7 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MapGen.cpp" />
     <ClCompile Include="Perlin.cpp" />
+    <ClCompile Include="RGB.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="VAO.cpp" />
@@ -174,6 +175,7 @@
     <ClInclude Include="Grid.h" />
     <ClInclude Include="MapGen.h" />
     <ClInclude Include="Perlin.h" />
+    <ClInclude Include="RGB.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="VAO.h" />
