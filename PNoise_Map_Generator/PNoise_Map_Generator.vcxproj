@@ -151,6 +151,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\glad.c" />
+    <ClCompile Include="BiomeManager.cpp" />
     <ClCompile Include="Buffer.cpp" />
     <ClCompile Include="Display.cpp" />
     <ClCompile Include="GLDebug.cpp" />
@@ -165,6 +166,7 @@
     <ClCompile Include="VertexBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BiomeManager.h" />
     <ClInclude Include="Buffer.h" />
     <ClInclude Include="Display.h" />
     <ClInclude Include="GLDebug.h" />

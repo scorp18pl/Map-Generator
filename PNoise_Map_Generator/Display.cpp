@@ -1,7 +1,7 @@
 #include "Display.h"
 #include <iostream>
 
-#define NUMBER_OF_CHANNELS 1
+#define NUMBER_OF_CHANNELS 3
 
 void Display::handleWindowError() {
 	if (window == nullptr) {

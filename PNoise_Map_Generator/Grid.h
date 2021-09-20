@@ -5,6 +5,8 @@
 
 class Grid {
 private:
+	bool has_seed = false;
+	int seed;
 	int width, height;
 	glm::vec2 **vectors;
 
@@ -15,7 +17,6 @@ private:
 	float fade(float x);
 	float fade2(float x, float y);
 	void randomize();
-
 public:
 	Grid(int width, int height);
 	Grid(int side);
@@ -24,6 +25,7 @@ public:
 	glm::vec2 getVectorAt(int x, int y);
 
 	void resize(int num_fields_x, int num_fields_y);
+	void setSeed(int seed);
 	void print();
 };
 

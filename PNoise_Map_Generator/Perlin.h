@@ -9,13 +9,18 @@ private:
 
 	Grid *grid;
 
-	uint8_t getPixelValue(int x, int y);
+	float getPixelValue(int x, int y);
 public:
 	Perlin(int window_width, int window_height);
 	~Perlin();
 
-	void addNoise(unsigned char *image, float weight, int num_fields_x, int num_fields_y);
-	void addNoise(unsigned char *image, float weight, int num_fields);
+	void setSeed(int seed);
+
+	void addNoise(float *image, float weight, int num_fields_x, int num_fields_y);
+	void addNoise(float *image, float weight, int num_fields);
+
+	void setNoise(float *image, int num_fields_x, int num_fields_y);
+	void setNoise(float *image, int num_fields);
 };
 
 #endif

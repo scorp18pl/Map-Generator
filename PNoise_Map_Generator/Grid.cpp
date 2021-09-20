@@ -101,16 +101,25 @@ Grid::Grid(int side)
 }
 
 void Grid::randomize() {
-	std::random_device device;
-	std::mt19937 gen(device());
+	if (!this->has_seed) {
+		std::random_device device;
+		this->seed = device();
+	}
+
+	std::mt19937 gen(this->seed);
 	std::uniform_real_distribution<> dist(0.0f, 1.0f);
-	
+
 	for (int i = 0; i < this->height; i++) {
 		for (int j = 0; j < this->width; j++) {
 			float angle = (float)dist(gen);
 			this->vectors[i][j] = Grid::getVector(angle);
 		}
 	}
+}
+
+void Grid::setSeed(int seed) {
+	this->has_seed = true;
+	this->seed = seed;
 }
 
 void Grid::resize(int num_fields_x, int num_fields_y) {
