@@ -84,13 +84,11 @@ float Grid::fade2(float x, float y) {
 //vector values to <0.0f, 0.0f>.
 Grid::Grid(int width, int height) 
 	:width(width), height(height) {
-	this->vectors = new glm::vec2 *[height];
+	size_t size = (size_t)width * (size_t)height;
+	this->vectors = new glm::vec2[size];
 
-	for (int i = 0; i < height; i++) {
-		this->vectors[i] = new glm::vec2[width];
-		for (int j = 0; j < width; j++) {
-			this->vectors[i][j] = glm::vec2(0.0f, 0.0f);
-		}
+	for (size_t i = 0; i < size; i++) {
+		this->vectors[i] = glm::vec2(0.0f);
 	}
 
 	randomize();
@@ -109,11 +107,9 @@ void Grid::randomize() {
 	std::mt19937 gen(this->seed);
 	std::uniform_real_distribution<> dist(0.0f, 1.0f);
 
-	for (int i = 0; i < this->height; i++) {
-		for (int j = 0; j < this->width; j++) {
-			float angle = (float)dist(gen);
-			this->vectors[i][j] = Grid::getVector(angle);
-		}
+	for (int i = 0; i < getSize(); i++) {
+		float angle = (float)dist(gen);
+		this->vectors[i] = Grid::getVector(angle);
 	}
 }
 
@@ -123,20 +119,15 @@ void Grid::setSeed(int seed) {
 }
 
 void Grid::resize(int num_fields_x, int num_fields_y) {
-	glm::vec2 **vectors_r = new glm::vec2 *[num_fields_y];
+	delete vectors;
 
-	for (int i = 0; i < num_fields_y; i++) {
-		vectors_r[i] = new glm::vec2[num_fields_x];
-		for (int j = 0; j < num_fields_x; j++) {
-			vectors_r[i][j] = glm::vec2(0.0f, 0.0f);
-		}
-	}
-	
 	this->width = num_fields_x;
 	this->height = num_fields_x;
+	this->vectors = new glm::vec2[getSize()];
 
-	delete vectors;
-	this->vectors = vectors_r;
+	for (int i = 0; i < getSize(); i++) {
+		this->vectors[i] = glm::vec2(0.0f);
+	}
 
 	randomize();
 }
@@ -144,7 +135,7 @@ void Grid::resize(int num_fields_x, int num_fields_y) {
 void Grid::print() {
 	for (int i = 0; i < this->height; i++) {
 		for (int j = 0; j < this->width; j++) {
-			glm::vec2 vec = this->vectors[i][j];
+			glm::vec2 vec = getVectorAt(j, i);
 			std::cout << vec.x << " " << vec.y << " " << vec.x * vec.x + vec.y * vec.y << std::endl;
 		}
 	}
@@ -188,6 +179,10 @@ float Grid::getValue(glm::vec2 position) {
 	return value;
 }
 
+size_t Grid::getSize() {
+	return (size_t)this->width * (size_t)this->height;
+}
+
 glm::vec2 Grid::getVectorAt(int x, int y) {
-	return this->vectors[y][x];
+	return this->vectors[y * this->width + x];
 }

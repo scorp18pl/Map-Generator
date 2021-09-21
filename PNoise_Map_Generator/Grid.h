@@ -8,7 +8,7 @@ private:
 	bool has_seed = false;
 	int seed;
 	int width, height;
-	glm::vec2 **vectors;
+	glm::vec2 *vectors;
 
 	static glm::vec2 getVector(float angle_frac);
 	glm::vec2 scaleCoordinates(glm::vec2 position);
@@ -22,6 +22,7 @@ public:
 	Grid(int side);
 
 	float getValue(glm::vec2 position);
+	size_t getSize();
 	glm::vec2 getVectorAt(int x, int y);
 
 	void resize(int num_fields_x, int num_fields_y);
