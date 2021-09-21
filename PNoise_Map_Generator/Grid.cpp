@@ -87,9 +87,11 @@ Grid::Grid(int width, int height)
 	size_t size = (size_t)width * (size_t)height;
 	this->vectors = new glm::vec2[size];
 
+#ifdef GRID_ZERO_VEC
 	for (size_t i = 0; i < size; i++) {
 		this->vectors[i] = glm::vec2(0.0f);
 	}
+#endif
 
 	randomize();
 }
@@ -98,10 +100,14 @@ Grid::Grid(int side)
 	:Grid(side, side) {
 }
 
+Grid::~Grid() {
+	delete[] this->vectors;
+}
+
 void Grid::randomize() {
 	if (!this->has_seed) {
 		std::random_device device;
-		this->seed = device();
+		setSeed(device());
 	}
 
 	std::mt19937 gen(this->seed);
@@ -119,15 +125,17 @@ void Grid::setSeed(int seed) {
 }
 
 void Grid::resize(int num_fields_x, int num_fields_y) {
-	delete vectors;
+	delete[] vectors;
 
 	this->width = num_fields_x;
 	this->height = num_fields_x;
 	this->vectors = new glm::vec2[getSize()];
 
+#ifdef GRID_ZERO_VEC
 	for (int i = 0; i < getSize(); i++) {
 		this->vectors[i] = glm::vec2(0.0f);
 	}
+#endif
 
 	randomize();
 }
@@ -155,8 +163,8 @@ float Grid::getValue(glm::vec2 position) {
 		dot_products[i] = glm::dot(corner_vectors[i], offset_vectors[i]);
 	}
 
-	delete corner_vectors;
-	delete offset_vectors;
+	delete[] corner_vectors;
+	delete[] offset_vectors;
 
 	float fade_values[] = {
 		fade2(1.0f - position_r.x, 1.0f - position_r.y),

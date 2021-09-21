@@ -20,6 +20,7 @@ private:
 public:
 	Grid(int width, int height);
 	Grid(int side);
+	~Grid();
 
 	float getValue(glm::vec2 position);
 	size_t getSize();

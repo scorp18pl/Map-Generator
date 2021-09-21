@@ -1,5 +1,19 @@
+#define _CRT_SECURE_NO_WARNINGS
+
 #include "MapGen.h"
 #include <iostream>
+
+#include <ctime>
+#include <sstream>
+#include <iomanip>
+#include <string>
+
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb_image/stb_image.h>
+
+#define __STDC_LIB_EXT1__
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#include <stb_image/stb_image_write.h>
 
 #define RGB_CHANNEL_COUNT 3
 
@@ -33,14 +47,21 @@ void MapGen::combineNoise(unsigned char *image) {
 	delete[] image_f;
 }
 
-MapGen::MapGen(int width, int height, float persistance)
-	: width(width), height(height), persistance(persistance) {
+MapGen::MapGen(int width, int height, float persistance, bool should_display)
+	: width(width), height(height), persistance(persistance), should_display(should_display) {
 	this->perlin = new Perlin(width, height);
-	this->display = new Display(width, height);
+
+	if (this->should_display) {
+		this->display = new Display(width, height);
+	}
+	else {
+		this->display = nullptr;
+	}
 }
 
 MapGen::~MapGen() {
 	delete perlin;
+	delete display;
 }
 
 void MapGen::start() {
@@ -53,8 +74,12 @@ void MapGen::start() {
 	}
 
 	combineNoise(image);
-	this->display->setTexture(image);
-	this->display->displayTexture();
+	exportImage(image);
+
+	if (this->should_display) {
+		this->display->setTexture(image);
+		this->display->displayTexture();
+	}
 
 	delete[] image;
 }
@@ -68,6 +93,28 @@ void MapGen::setSeaLevel(float value) {
 	BiomeManager::setSeaLevel(value);
 }
 
+void MapGen::setShouldDisplay(bool value) {
+	this->should_display = value;
+}
+
 void MapGen::setOctavesNumber(int value) {
 	this->octaves = value;
+}
+
+void MapGen::exportImage(unsigned char *image) {
+	std::time_t t = std::time(0);
+	std::tm *now = std::localtime(&t);
+
+	std::stringstream ss;
+	ss	<< "maps/" 
+		<< now->tm_year + 1900 << "." 
+		<< std::setfill('0') << std::setw(2) << now->tm_mon << "." 
+		<< now->tm_mday << " " << now->tm_hour << "-" 
+		<< std::setfill('0') << std::setw(2) << now->tm_min << "-"
+		<< std::setfill('0') << std::setw(2) << now->tm_sec << ".png";
+
+	std::string s = ss.str();
+
+	stbi_write_png(s.c_str(), this->width, this->height, 3, image,
+				   3 * this->width);
 }

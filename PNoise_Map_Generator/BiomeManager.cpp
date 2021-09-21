@@ -40,9 +40,9 @@ RGB BiomeManager::getColor(float height) {
 		return BiomeManager::MOUNTAIN1_COLOR;
 	}
 
-	//if (height >= BiomeManager::FOREST_LEVEL) {
-	//	return BiomeManager::FOREST_COLOR;
-	//}
+	if (height >= BiomeManager::FOREST_LEVEL) {
+		return BiomeManager::FOREST_COLOR;
+	}
 
 	if (height >= BiomeManager::GRASS2_LEVEL) {
 		return BiomeManager::GRASS2_COLOR;
@@ -83,9 +83,10 @@ void BiomeManager::setSeaLevel(float value) {
 	BiomeManager::SEA3_LEVEL = value - 0.03f;
 	BiomeManager::SEA4_LEVEL = value;
 	BiomeManager::SAND_LEVEL = value + 0.0008f;
-	BiomeManager::GRASS1_LEVEL = value + 0.002f;
-	BiomeManager::GRASS2_LEVEL = value + 0.006f;
+	BiomeManager::GRASS1_LEVEL = value + 0.01f;
+	BiomeManager::GRASS2_LEVEL = value + 0.02f;
+	BiomeManager::FOREST_LEVEL = value + 0.05f;
+	BiomeManager::MOUNTAIN1_LEVEL = value + 0.8f;
 	BiomeManager::MOUNTAIN2_LEVEL = value + 0.1f;
-	BiomeManager::MOUNTAIN1_LEVEL = value + 0.2f;
-	BiomeManager::SNOW_LEVEL = value + 0.28f;
+	BiomeManager::SNOW_LEVEL = value + 0.11f;
 }

@@ -28,7 +28,7 @@ private:
 		1, 2, 3
 	};
 
-	Texture *texture;
+	Texture *texture = nullptr;
 	GLFWwindow *window;
 	Shader *shader;
 

@@ -21,8 +21,10 @@ void Display::initializeGL() {
 }
 
 void Display::setTexture(unsigned char *image) {
-	this->texture = new Texture(image, this->width, this->height, NUMBER_OF_CHANNELS,
-								   GL_TEXTURE_2D, 0, GL_RGB, GL_UNSIGNED_BYTE);
+	delete this->texture;
+	this->texture = new Texture(image, this->width, this->height, 
+								NUMBER_OF_CHANNELS, GL_TEXTURE_2D, 
+								0, GL_RGB, GL_UNSIGNED_BYTE);
 }
 
 Display::Display(int window_width, int window_height) {
@@ -57,6 +59,7 @@ Display::Display(int window_width, int window_height) {
 
 Display::~Display() {
 	glfwDestroyWindow(this->window);
+	delete this->texture;
 	delete this->shader;
 	delete this->vbo;
 	delete this->vao;
