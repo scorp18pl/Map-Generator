@@ -1,1 +1,0 @@
-void kernel(float *dir, double *B, double *C, int arraySize);

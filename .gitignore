@@ -392,3 +392,6 @@ FodyWeavers.xsd
 *.sln
 Pnoise_Map_Generator/maps
 PNoise_Map_Generator/Map - 2021.8.21 - 13 
+*.vcxproj*
+*.cu
+*.cuh
